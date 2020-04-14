@@ -1,24 +1,29 @@
-scalar GraphQLDate
-
 "Toned down Issue, used as inputs, without server generated values."
-input IssueInputs {
-title: String!
-"Optional, if not supplied, will be set to 'New'"
-status: String
-owner: String
-effort: Int
-due: GraphQLDate
+input IssueInputs{
+  title : String!
+  "Optional, if not supplied, will be set to 'New'"
+  status : StatusType = New
+  owner : String
+  effort : Int = 15
+  completionDate : String
 }
 
 type Issue {
   id: Int!
   title: String!
-  status: String!
+  status: StatusType!
   owner: String
-  created: GraphQLDate!
+  created: String!
   effort: Int
-  completionDate: GraphQLDate
+  completionDate: String
   
+}
+
+enum StatusType{
+  New
+  Assigned
+  Fixed
+  Closed
 }
 
 #### Top Level Declarations
@@ -30,5 +35,8 @@ type Query {
 
 type Mutation {
   setAboutMessage(message: String!): String
-  issueAdd(issue: IssueInputs!): Issue! 
+  issueAdd(issue:IssueInputs!) : Issue!
 }
+
+
+  
