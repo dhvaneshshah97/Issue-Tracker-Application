@@ -1,19 +1,32 @@
-// const initialIssues = [
-//     {
-//         id: 1, status: 'open', owner: 'Dhvanesh', created: new Date('2016-08-15'), effort: 5,
-//         completionDate: undefined, title: 'Error in console when clicking Add',
-//     },
-//     {
-//         id: 2, status: 'assigned', owner: 'Dharmik', created: new Date('2016-08-16'), effort: 14,
-//         completionDate: new Date('2016-08-30'), title: 'Missing bottom border on panel',
-//     },
-// ];
-
-
-
-
 const contentNode = document.getElementById('contents');
-const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
+// const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
+
+
+async function graphQLFetch(query, variables = {}) {
+    try {
+        const response = await fetch('/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, variables })
+        });
+        const body = await response.text();
+        const result = JSON.parse(body);
+
+        if (result.errors) {
+            const error = result.errors[0];
+            if (error.extensions.code == 'BAD_USER_INPUT') {
+                const details = error.extensions.exception.errors.join('\n ');
+                alert(`${error.message}:\n ${details}`);
+            } else {
+                alert(`${error.extensions.code}: ${error.message}`);
+            }
+        }
+        return result.data;
+    } catch (e) {
+        alert(`Error in sending data to server: ${e.message}`);
+    }
+}
+
 class IssueList extends React.Component {
     constructor() {
         super();
@@ -23,6 +36,8 @@ class IssueList extends React.Component {
     componentDidMount() {
         this.loadData();
     }
+
+
     async loadData() {
         // setTimeout(() => { this.setState({ issues: initialIssues }) }, 500);
         const query = `
@@ -33,23 +48,27 @@ class IssueList extends React.Component {
             }
         }`;
 
-        const response = await fetch('/graphql', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query })
-        });
+        const data = await graphQLFetch(query);
+        if (data) {
+            this.setState({ issues: data.issueList });
+        }
 
-        // const result = await response.json();
-        const body = await response.text()
-        const result = JSON.parse(body, jsonDateReviver);
-        this.setState({ issues: result.data.issueList });
     }
-    createIssue(issue) {
-        issue.id = this.state.issues.length + 1;
-        issue.created = new Date();
-        const newIssueList = this.state.issues.slice();
-        newIssueList.push(issue);
-        this.setState({ issues: newIssueList });
+    async createIssue(issue) {
+        // issue.id = this.state.issues.length + 1;
+        // issue.created = new Date();
+        // const newIssueList = this.state.issues.slice();
+        // newIssueList.push(issue);
+        // this.setState({ issues: newIssueList });
+        const query = `mutation issueAdd($issue: IssueInputs!){
+            issueAdd(issue:$issue) {
+                id 
+                }
+                }`;
+        const data = await graphQLFetch(query, { issue });
+        if (data) {
+            this.loadData();
+        }
 
     }
 
@@ -77,10 +96,10 @@ class IssueFilter extends React.Component {
         );
     }
 }
-function jsonDateReviver(key, value) {
-    if (dateRegex.test(value)) return new Date(value);
-    return value;
-    }
+// function jsonDateReviver(key, value) {
+//     if (dateRegex.test(value)) return new Date(value);
+//     return value;
+// }
 
 function Issuerow(props) {
     return (
@@ -88,9 +107,9 @@ function Issuerow(props) {
             <td>{props.issue.id}</td>
             <td>{props.issue.status}</td>
             <td>{props.issue.owner}</td>
-            <td>{props.issue.created.toDateString()}</td>
+            <td>{props.issue.created}</td>
             <td>{props.issue.effort}</td>
-            <td>{props.issue.completionDate ? props.issue.completionDate.toDateString() : 'Not Provided'}</td>
+            <td>{props.issue.completionDate}</td>
             <td>{props.issue.title}</td>
         </tr>
     );
@@ -150,7 +169,11 @@ class IssueAdd extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         const form = document.forms.issueAdd;
-        const issue = { owner: form.owner.value, title: form.title.value, status: 'New', }
+        const issue = {
+            owner: form.owner.value, title: form.title.value,
+            completionDate: "4-3-2019",
+
+        }
         this.props.createIssue(issue);
         form.owner.value = ""; form.title.value = "";
 
