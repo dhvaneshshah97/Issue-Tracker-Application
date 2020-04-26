@@ -40,10 +40,19 @@ async function connectToDb() {
     const c = await db.collection('issues').find({}).toArray();
     console.log(c);
 }
+
+async function getNextSequence(name) {
+    const result = await db.collection('counters').findOneAndUpdate(
+        { _id: name },
+        { $inc: { current: 1 } },
+        { returnOriginal: false },
+    );
+    return result.value.current;
+}
 async function issueList() {
     // return issuesDB;
     const issues = await db.collection('issues').find({}).toArray();
-    return issues;  
+    return issues;
 }
 
 
@@ -63,13 +72,18 @@ function validateIssue(issue) {
     }
 
 }
-function issueAdd(_, { issue }) {
+async function issueAdd(_, { issue }) {
     validateIssue(issue);
-    issue.id = issuesDB.length + 1;
-    issue.created = "24-2-1997";
+    // issue.id = issuesDB.length + 1;
+    issue.created = new Date();
+    issue.id = await getNextSequence('issues');
+    const result = await db.collection('issues').insertOne(issue);
+    const savedIssue = await db.collection('issues').findOne({_id:result.insertedId});
+    return savedIssue;
+
     // if (issue.status == undefined) issue.status = "New";
-    issuesDB.push(issue);
-    return issue;
+    // issuesDB.push(issue);
+    // return issue;
 }
 
 const server = new ApolloServer({
@@ -79,21 +93,21 @@ const server = new ApolloServer({
         console.log(error);
         return error;
     }
-       
+
 });
 const app = express();
 fileServerMiddleware = express.static('public');
 app.use('/', fileServerMiddleware);
 server.applyMiddleware({ app, path: '/graphql' });
 
-(async function(){
-    try{
+(async function () {
+    try {
         await connectToDb();
         app.listen(3000, function () {
             console.log('App started on port 3000');
         });
     }
-    catch(err){
-        console.log('ERROR:',err);
+    catch (err) {
+        console.log('ERROR:', err);
     }
 })();
