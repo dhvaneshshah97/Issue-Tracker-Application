@@ -16,12 +16,12 @@ db.issues.remove({});
 const issuesDB = [
     {
         id: 1, status: 'New', owner: 'Ram', effort: 5,
-        created: new Date('2019-01-15'), due: undefined,
+        created: new Date('2019-01-15'), completionDate: undefined,
         title: 'Error in console when clicking Add',
     },
     {
         id: 2, status: 'Assigned', owner: 'Ravan', effort: 14,
-        created: new Date('2019-01-16'), due: new Date('2019-02-01'),
+        created: new Date('2019-01-16'), completionDate: new Date('2019-02-01'),
         title: 'Missing bottom border on panel',
     },
 ];
