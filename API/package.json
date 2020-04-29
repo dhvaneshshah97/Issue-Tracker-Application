@@ -1,15 +1,13 @@
 {
-  "name": "pro-mern-stack",
+  "name": "api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "api",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -w server -e js,graphql server/server.js",
-    "compile": "babel src --presets react,es2015 --out-dir public",
-    "watch": "babel src --presets react,es2015 --out-dir public --watch --verbose"
+    "start": "nodemon -e js,graphql server.js"
   },
-  "author": "Dhvanesh",
+  "author": "Dhvanesh Shah",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.11.0",
@@ -23,6 +21,6 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "express": "^4.17.1",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.3"
   }
 }

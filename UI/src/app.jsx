@@ -4,7 +4,7 @@ const contentNode = document.getElementById('contents');
 
 async function graphQLFetch(query, variables = {}) {
     try {
-        const response = await fetch('/graphql', {
+        const response = await fetch('http://localhost:3000/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query, variables })
@@ -46,9 +46,11 @@ class IssueList extends React.Component {
                 id title status owner
                 created effort completionDate 
             }
-        }`;
+        }`; 
 
         const data = await graphQLFetch(query);
+        // console.log(data.issueList);
+        // console.log("Program halted above");
         if (data) {
             this.setState({ issues: data.issueList });
         }
