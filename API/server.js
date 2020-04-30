@@ -96,11 +96,10 @@ const server = new ApolloServer({
 
 });
 const app = express();
-const enableCors = (process.env.ENABLE_CORS || 'true') == 'true';
-console.log('CORS setting:', enableCors);
+
 // fileServerMiddleware = express.static('public');
 // app.use('/', fileServerMiddleware);
-server.applyMiddleware({ app, path: '/graphql',cors : enableCors });
+server.applyMiddleware({ app, path: '/graphql' });
 
 (async function () {
     try {
