@@ -16,7 +16,7 @@ async function graphQLFetch(query) {
     var variables = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     try {
-        var response = await fetch('http://localhost:3000/graphql', {
+        var response = await fetch(window.ENV.UI_API_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query: query, variables: variables })
