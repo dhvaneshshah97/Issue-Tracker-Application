@@ -24,6 +24,7 @@
     "curl": "^0.1.4",
     "dotenv": "^8.2.0",
     "graphql": "^15.0.0",
+    "http-proxy-middleware": "^1.0.3",
     "mongodb": "^3.5.6"
   }
 }
