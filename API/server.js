@@ -2,14 +2,24 @@ const fs = require('fs');
 const express = require("express");
 const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
 
-const url =  process.env.DB_URL || 'mongodb://localhost/issuetracker';
-const port = process.env.API_SERVER_PORT || 3000;
+const url = 'mongodb://localhost/issuetracker';
+// Atlas URL - replace UUU with user, PPP with password, XXX with hostname
+// const url = 'mongodb+srv://UUU:PPP@cluster0-XXX.mongodb.net/issuetracker?retryWrites=true';
 
 let db;
 
 let aboutMessage = "Issue Tracker API v1.0";
+// const issuesDB = [
+//     {
+//         id: 1, status: 'New', owner: 'Dhvanesh', created: new Date('2016-08-15'), effort: 5,
+//         completionDate: undefined, title: 'Error in console when clicking Add',
+//     },
+//     {
+//         id: 2, status: 'Assigned', owner: 'Dharmik', created: new Date('2016-08-16'), effort: 14,
+//         completionDate: new Date('2016-08-30'), title: 'Missing bottom border on panel',
+//     },
+// ];
 
 const resolvers = {
     Query: {
@@ -27,8 +37,8 @@ async function connectToDb() {
     await client.connect();
     console.log("Connected to MongoDB at", url);
     db = client.db();
-    // const c = await db.collection('issues').find({}).toArray();
-    // console.log(c);
+    const c = await db.collection('issues').find({}).toArray();
+    console.log(c);
 }
 
 async function getNextSequence(name) {
@@ -95,8 +105,8 @@ server.applyMiddleware({ app, path: '/graphql',cors : enableCors });
 (async function () {
     try {
         await connectToDb();
-        app.listen(port, function () {
-            console.log(`API server started on port ${port}`);
+        app.listen(3000, function () {
+            console.log('API server started on port 3000');
         });
     }
     catch (err) {
