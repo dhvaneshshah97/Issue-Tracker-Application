@@ -1,2 +1,6 @@
 node_modules
 package-lock.json
+API/package-lock.json
+API/sample.env
+UI/package-lock.json
+UI/Sample.env
