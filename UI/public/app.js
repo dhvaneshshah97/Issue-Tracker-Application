@@ -8,6 +8,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/* eslint linebreak-style: ["error", "windows"] */
+/* eslint "react/react-in-jsx-scope": "off" */
+/* globals React ReactDOM */
+/* eslint "react/jsx-no-undef": "off" */
+/* eslint "react/no-multi-comp": "off" */
+/* eslint "no-alert": "off" */
 var contentNode = document.getElementById('contents');
 // const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
 
@@ -26,7 +32,7 @@ async function graphQLFetch(query) {
 
         if (result.errors) {
             var error = result.errors[0];
-            if (error.extensions.code == 'BAD_USER_INPUT') {
+            if (error.extensions.code === 'BAD_USER_INPUT') {
                 var details = error.extensions.exception.errors.join('\n ');
                 alert(error.message + ':\n ' + details);
             } else {
@@ -36,6 +42,7 @@ async function graphQLFetch(query) {
         return result.data;
     } catch (e) {
         alert('Error in sending data to server: ' + e.message);
+        return null;
     }
 }
 
@@ -87,6 +94,8 @@ var IssueList = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var issues = this.state.issues;
+
             return React.createElement(
                 'div',
                 null,
@@ -97,7 +106,7 @@ var IssueList = function (_React$Component) {
                 ),
                 React.createElement(IssueFilter, null),
                 React.createElement('hr', null),
-                React.createElement(IssueTable, { issues: this.state.issues }),
+                React.createElement(IssueTable, { issues: issues }),
                 React.createElement('hr', null),
                 React.createElement(IssueAdd, { createIssue: this.createIssue }),
                 React.createElement('hr', null)
@@ -107,6 +116,9 @@ var IssueList = function (_React$Component) {
 
     return IssueList;
 }(React.Component);
+
+// eslint-disable-next-line react/prefer-stateless-function
+
 
 var IssueFilter = function (_React$Component2) {
     _inherits(IssueFilter, _React$Component2);
@@ -135,44 +147,46 @@ var IssueFilter = function (_React$Component2) {
 //     return value;
 // }
 
-function Issuerow(props) {
+function Issuerow(_ref) {
+    var issue = _ref.issue;
+
     return React.createElement(
         'tr',
         null,
         React.createElement(
             'td',
             null,
-            props.issue.id
+            issue.id
         ),
         React.createElement(
             'td',
             null,
-            props.issue.status
+            issue.status
         ),
         React.createElement(
             'td',
             null,
-            props.issue.owner
+            issue.owner
         ),
         React.createElement(
             'td',
             null,
-            props.issue.created
+            issue.created
         ),
         React.createElement(
             'td',
             null,
-            props.issue.effort
+            issue.effort
         ),
         React.createElement(
             'td',
             null,
-            props.issue.completionDate
+            issue.completionDate
         ),
         React.createElement(
             'td',
             null,
-            props.issue.title
+            issue.title
         )
     );
 }
@@ -188,13 +202,15 @@ function Issuerow(props) {
 //     effort: 0              //doubt
 
 // };
-function IssueTable(props) {
+function IssueTable(_ref2) {
+    var issues = _ref2.issues;
+
 
     // const sampleIssue1 = Object.assign({},sampleIssue);
     // setTimeout(()=>{this.createIssue(sampleIssue1)},2500);
 
 
-    var issueRows = props.issues.map(function (issue) {
+    var issueRows = issues.map(function (issue) {
         return React.createElement(Issuerow, { key: issue.id, issue: issue });
     });
     return React.createElement(
@@ -273,12 +289,16 @@ var IssueAdd = function (_React$Component3) {
             e.preventDefault();
             var form = document.forms.issueAdd;
             var issue = {
-                owner: form.owner.value, title: form.title.value,
+                owner: form.owner.value,
+                title: form.title.value,
                 completionDate: "4-3-2019"
 
             };
-            this.props.createIssue(issue);
-            form.owner.value = "";form.title.value = "";
+            var createIssue = this.props.createIssue;
+
+            createIssue(issue);
+            form.owner.value = '';
+            form.title.value = '';
         }
     }, {
         key: 'render',
@@ -290,7 +310,7 @@ var IssueAdd = function (_React$Component3) {
                 React.createElement('input', { type: 'text', name: 'title', placeholder: 'Title' }),
                 React.createElement(
                     'button',
-                    null,
+                    { type: 'submit' },
                     'Add'
                 )
             );
