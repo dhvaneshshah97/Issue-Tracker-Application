@@ -2,49 +2,26 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _graphQLFetch = require('./graphQLFetch.js');
+
+var _graphQLFetch2 = _interopRequireDefault(_graphQLFetch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/* eslint linebreak-style: ["error", "windows"] */
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint linebreak-style: ["error", "windows"] */
 /* eslint "react/react-in-jsx-scope": "off" */
 /* globals React ReactDOM PropTypes*/
 /* eslint "react/jsx-no-undef": "off" */
 /* eslint "react/no-multi-comp": "off" */
 /* eslint "no-alert": "off" */
+
 var contentNode = document.getElementById('contents');
 // const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
 
-
-async function graphQLFetch(query) {
-    var variables = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    try {
-        var response = await fetch(window.ENV.UI_API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: query, variables: variables })
-        });
-        var body = await response.text();
-        var result = JSON.parse(body);
-
-        if (result.errors) {
-            var error = result.errors[0];
-            if (error.extensions.code === 'BAD_USER_INPUT') {
-                var details = error.extensions.exception.errors.join('\n ');
-                alert(error.message + ':\n ' + details);
-            } else {
-                alert(error.extensions.code + ': ' + error.message);
-            }
-        }
-        return result.data;
-    } catch (e) {
-        alert('Error in sending data to server: ' + e.message);
-        return null;
-    }
-}
 
 var IssueList = function (_React$Component) {
     _inherits(IssueList, _React$Component);
@@ -70,7 +47,7 @@ var IssueList = function (_React$Component) {
             // setTimeout(() => { this.setState({ issues: initialIssues }) }, 500);
             var query = '\n        query{\n            issueList{\n                id title status owner\n                created effort completionDate \n            }\n        }';
 
-            var data = await graphQLFetch(query);
+            var data = await (0, _graphQLFetch2.default)(query);
             // console.log(data.issueList);
             // console.log("Program halted above");
             if (data) {
@@ -86,7 +63,7 @@ var IssueList = function (_React$Component) {
             // newIssueList.push(issue);
             // this.setState({ issues: newIssueList });
             var query = 'mutation issueAdd($issue: IssueInputs!){\n            issueAdd(issue:$issue) {\n                id \n                }\n                }';
-            var data = await graphQLFetch(query, { issue: issue });
+            var data = await (0, _graphQLFetch2.default)(query, { issue: issue });
             if (data) {
                 this.loadData();
             }

@@ -8,7 +8,7 @@
     "start": "nodemon -w uiserver.js -w .env uiserver.js",
     "compile": "babel src --presets react,es2015 --out-dir public",
     "watch": "babel src --presets react,es2015 --out-dir public --watch --verbose",
-    "lint" : "eslint . --ext js,jsx --ignore-pattern public"
+    "lint": "eslint . --ext js,jsx --ignore-pattern public"
   },
   "author": "Dhvanesh",
   "license": "ISC",
@@ -22,7 +22,9 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "express": "^4.17.1",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
     "apollo-server-express": "^2.11.0",
