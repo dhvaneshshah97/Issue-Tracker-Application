@@ -11,7 +11,7 @@ const port  = process.env.API_SERVER_PORT || 3000;
 
 let db;
 
-let aboutMessage = "Issue Tracker API v1.0";
+let aboutMessage = 'Issue Tracker API v1.0';
 // const issuesDB = [
 //     {
 //         id: 1, status: 'New', owner: 'Dhvanesh', created: new Date('2016-08-15'), effort: 5,
@@ -59,14 +59,15 @@ async function issueList() {
 
 
 function setAboutMessage(_, { message }) {
-    return aboutMessage = message;
+    aboutMessage = message;
+    return aboutMessage;
 }
 function validateIssue(issue) {
     const errors = [];
     if (issue.title.length < 3) {
-        errors.push('Field "title" must be at least 3 characters long.')
+        errors.push('Field "title" must be at least 3 characters long.');
     }
-    if (issue.status == 'Assigned' && !issue.owner) {
+    if (issue.status === 'Assigned' && !issue.owner) {
         errors.push('Field "owner" is required when status is "Assigned"');
     }
     if (errors.length > 0) {
@@ -77,9 +78,10 @@ function validateIssue(issue) {
 async function issueAdd(_, { issue }) {
     validateIssue(issue);
     // issue.id = issuesDB.length + 1;
-    issue.created = new Date();
-    issue.id = await getNextSequence('issues');
-    const result = await db.collection('issues').insertOne(issue);
+    const newIssue = { ...issue };
+    newIssue.created = new Date();
+    newIssue.id = await getNextSequence('issues');
+    const result = await db.collection('issues').insertOne(newIssue);
     const savedIssue = await db.collection('issues').findOne({_id:result.insertedId});
     return savedIssue;
 
@@ -91,7 +93,7 @@ async function issueAdd(_, { issue }) {
 const server = new ApolloServer({
     typeDefs: fs.readFileSync('schema.graphql', 'utf-8'),
     resolvers,
-    formatError: error => {
+    formatError: (error) => {
         console.log(error);
         return error;
     }
@@ -103,14 +105,14 @@ const app = express();
 // app.use('/', fileServerMiddleware);
 server.applyMiddleware({ app, path: '/graphql' });
 
-(async function () {
+(async function start() {
     try {
         await connectToDb();
-        app.listen(3000, function () {
+        app.listen(port,  () => {
             console.log(`API server started on port ${port}`);
         });
     }
     catch (err) {
         console.log('ERROR:', err);
     }
-})();
+}());
