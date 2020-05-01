@@ -10,7 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /* eslint linebreak-style: ["error", "windows"] */
 /* eslint "react/react-in-jsx-scope": "off" */
-/* globals React ReactDOM */
+/* globals React ReactDOM PropTypes*/
 /* eslint "react/jsx-no-undef": "off" */
 /* eslint "react/no-multi-comp": "off" */
 /* eslint "no-alert": "off" */
@@ -319,5 +319,8 @@ var IssueAdd = function (_React$Component3) {
 
     return IssueAdd;
 }(React.Component);
+// IssueAdd.propTypes = {
+//     createIssue : React.propTypes.func.isRequired,
+// };
 
 ReactDOM.render(React.createElement(IssueList, null), contentNode); // Render the component inside the content Node

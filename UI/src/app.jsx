@@ -1,6 +1,6 @@
  /* eslint linebreak-style: ["error", "windows"] */
  /* eslint "react/react-in-jsx-scope": "off" */
-/* globals React ReactDOM */
+/* globals React ReactDOM PropTypes*/
 /* eslint "react/jsx-no-undef": "off" */
 /* eslint "react/no-multi-comp": "off" */
 /* eslint "no-alert": "off" */
@@ -90,7 +90,7 @@ class IssueList extends React.Component {
                 <hr />
                 <IssueTable issues={issues} />
                 <hr />
-                <IssueAdd createIssue={this.createIssue} />
+                <IssueAdd createIssue={this.createIssue}/>
                 <hr />
             </div>
         );
@@ -204,5 +204,8 @@ class IssueAdd extends React.Component {
         )
     }
 }
+// IssueAdd.propTypes = {
+//     createIssue : React.propTypes.func.isRequired,
+// };
 
 ReactDOM.render(<IssueList />, contentNode); // Render the component inside the content Node
