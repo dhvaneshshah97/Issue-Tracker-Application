@@ -1,12 +1,6 @@
 /* eslint linebreak-style: ["error", "windows"] */
-/* eslint "react/react-in-jsx-scope": "off" */
-/* globals React ReactDOM PropTypes*/
-/* eslint "react/jsx-no-undef": "off" */
-/* eslint "react/no-multi-comp": "off" */
-/* eslint "no-alert": "off" */
-
-
-
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class IssueAdd extends React.Component {
     constructor() {
@@ -45,4 +39,8 @@ export default class IssueAdd extends React.Component {
 
         )
     }
+}
+
+IssueAdd.propTypes = {
+    createIssue : PropTypes.func.isRequired,
 }
