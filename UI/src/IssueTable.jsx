@@ -11,6 +11,7 @@ function Issuerow({ issue }) {
             <td>{issue.effort}</td>
             <td>{issue.completionDate}</td>
             <td>{issue.title}</td>
+            <td><a href={`/#/edit/${issue.id}`}>Edit</a></td>
         </tr>
     );
 } 
@@ -35,6 +36,7 @@ export default function IssueTable({ issues }) {
                     <th>Effort</th>
                     <th>Completion Date</th>
                     <th>Title</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
