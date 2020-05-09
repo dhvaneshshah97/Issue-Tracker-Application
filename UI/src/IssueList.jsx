@@ -16,18 +16,28 @@ export default class IssueList extends React.Component {
         this.loadData();
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.location.search.prevSearch !== this.props.location.search) {
+            this.loadData();
+        }
+    }
 
     async loadData() {
-        // setTimeout(() => { this.setState({ issues: initialIssues }) }, 500);
+        // const { location: { search } } = this.props;
+        const params = new URLSearchParams(this.props.location.search);
+        const vars = {};
+        if (params.get('status')) vars.status = params.get('status');
+
         const query = `
-        query{
-            issueList{
+        query issueList($status: StatusType){
+            issueList(status:$status){
                 id title status owner
                 created effort completionDate 
             }
         }`;
+        
 
-        const data = await graphQLFetch(query);
+        const data = await graphQLFetch(query, vars);
         // console.log(data.issueList);
         // console.log("Program halted above");
         if (data) {
