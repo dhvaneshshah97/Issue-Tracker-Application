@@ -30,7 +30,7 @@ export default class IssueAdd extends React.Component {
     }
 
     render() {
-        console.log("hello");
+        // console.log("hello");
         return (
             <form name="issueAdd" onSubmit={this.handleSubmit}>
                 <input type="text" name="owner" placeholder="Owner" />

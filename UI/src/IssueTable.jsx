@@ -1,5 +1,6 @@
 /* eslint linebreak-style: ["error", "windows"] */
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Issuerow({ issue }) {
     return (
@@ -11,7 +12,7 @@ function Issuerow({ issue }) {
             <td>{issue.effort}</td>
             <td>{issue.completionDate}</td>
             <td>{issue.title}</td>
-            <td><a href={`/#/edit/${issue.id}`}>Edit</a></td>
+            <td><Link to={ `/edit/${issue.id}` }>Edit</Link></td>
         </tr>
     );
 } 
