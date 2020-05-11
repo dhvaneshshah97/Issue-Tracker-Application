@@ -18,6 +18,7 @@ export default class IssueAdd extends React.Component {
         const issue = {
             owner: form.owner.value,
             title: form.title.value,
+            status: form.status.value,
             completionDate: "4-3-2019",
 
         }
@@ -25,16 +26,16 @@ export default class IssueAdd extends React.Component {
         createIssue(issue);
         form.owner.value = '';
         form.title.value = '';
-
-
+        form.status.value = '';
     }
 
     render() {
         // console.log("hello");
         return (
             <form name="issueAdd" onSubmit={this.handleSubmit}>
-                <input type="text" name="owner" placeholder="Owner" />
-                <input type="text" name="title" placeholder="Title" />
+                <input type="text" name="owner" placeholder="Owner" /><br/>
+                <input type="text" name="title" placeholder="Title" /><br/>
+                <input type="text" name="status" placeholder="Status" /><br/>
                 <button type="submit">Add</button>
             </form>
 
