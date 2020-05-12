@@ -1,8 +1,10 @@
 /* eslint linebreak-style: ["error", "windows"] */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, NavLink } from 'react-router-dom';
 
-function Issuerow({ issue }) {
+// function Issuerow({ issue }) {
+const Issuerow = withRouter(({ issue, location: { search } }) => {
+    const selectLocation = { pathname: `/issues/${issue.id}`, search };
     return (
         <tr>
             <td>{issue.id}</td>
@@ -12,10 +14,16 @@ function Issuerow({ issue }) {
             <td>{issue.effort}</td>
             <td>{issue.completionDate}</td>
             <td>{issue.title}</td>
-            <td><Link to={ `/edit/${issue.id}` }>Edit</Link></td>
+            {/* <td><Link to={ `/edit/${issue.id}` }>Edit</Link></td> */}
+            <td>
+                <Link to={`/edit/${issue.id}`}>Edit</Link>
+                {' | '}
+                <NavLink to={selectLocation}>Select</NavLink>
+            </td>
         </tr>
     );
-} 
+});
+
 
 
 export default function IssueTable({ issues }) {

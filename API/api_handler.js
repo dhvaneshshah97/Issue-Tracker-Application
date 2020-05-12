@@ -8,6 +8,7 @@ const resolvers = {
     Query: {
         about: about.getMessage,
         issueList: issue.list,
+        issue: issue.get,
     },
     Mutation: {
         setAboutMessage: about.setMessage,

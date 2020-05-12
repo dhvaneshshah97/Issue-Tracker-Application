@@ -6,6 +6,7 @@ input IssueInputs{
   owner : String
   effort : Int = 15
   completionDate : String
+  description: String
 }
 
 type Issue {
@@ -17,6 +18,7 @@ type Issue {
   created: String!
   effort: Int
   completionDate: String
+  description: String
   
 }
 
@@ -32,6 +34,7 @@ enum StatusType{
 type Query {
   about: String!
   issueList(status:StatusType): [Issue!]!
+  issue(id: Int!): Issue!
 }
 
 type Mutation {
