@@ -4,7 +4,7 @@ input IssueInputs{
   "Optional, if not supplied, will be set to 'New'"
   status : StatusType = New
   owner : String
-  effort : Int = 15
+  effort : Int 
   completionDate : String
   description: String
 }
@@ -33,7 +33,11 @@ enum StatusType{
 
 type Query {
   about: String!
-  issueList(status:StatusType): [Issue!]!
+  issueList(
+    status:StatusType
+    effortMin: Int
+    effortMax: Int  
+): [Issue!]!
   issue(id: Int!): Issue!
 }
 
