@@ -29,10 +29,29 @@ export default class IssueEdit extends React.Component {
             issue: { ...prevState.issue, [name]: value },
         }));
     }
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
         const { issue } = this.state;
-        console.log(issue); // eslint-disable-line no-console
+        // console.log(issue); // eslint-disable-line no-console
+        const query = `mutation issueUpdate(
+            $id: Int!
+            $changes: IssueUpdateInputs!
+            ) {
+                issueUpdate(
+                    id: $id
+                    changes: $changes
+                ){
+                    id title status owner
+                    effort created completionDate description
+                }
+            }`;
+        const { id, created, ...changes} = issue;
+        console.log(changes);
+        const data = await graphQLFetch(query, { changes, id });
+        if (data) {
+            this.setState({ issue: data.issueUpdate});
+            alert('Issue Updated Successfully...!'); // eslint-disable-line no-alert
+        }
     }
     async loadData() {
         const query = `query issue($id: Int!) {
