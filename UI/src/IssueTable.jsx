@@ -3,7 +3,12 @@ import React from 'react';
 import { Link, withRouter, NavLink } from 'react-router-dom';
 
 // function Issuerow({ issue }) {
-const Issuerow = withRouter(({ issue, location: { search } }) => {
+const Issuerow = withRouter(({
+    issue,
+    location: { search },
+    closeIssue,
+    index,
+}) => {
     const selectLocation = { pathname: `/issues/${issue.id}`, search };
     return (
         <tr>
@@ -19,6 +24,8 @@ const Issuerow = withRouter(({ issue, location: { search } }) => {
                 <Link to={`/edit/${issue.id}`}>Edit</Link>
                 {' | '}
                 <NavLink to={selectLocation}>Select</NavLink>
+                {' | '}
+                <button type="button" onClick={() => { closeIssue(index); }}>Close</button>
             </td>
         </tr>
     );
@@ -26,14 +33,14 @@ const Issuerow = withRouter(({ issue, location: { search } }) => {
 
 
 
-export default function IssueTable({ issues }) {
+export default function IssueTable({ issues, closeIssue }) {
 
     // const sampleIssue1 = Object.assign({},sampleIssue);
     // setTimeout(()=>{this.createIssue(sampleIssue1)},2500);
 
 
 
-    const issueRows = issues.map(issue => <Issuerow key={issue.id} issue={issue} />);
+    const issueRows = issues.map((issue, index) => <Issuerow key={issue.id} issue={issue} closeIssue={closeIssue} index={index} />);
     return (
         <table className="bordered-table">
             <thead>
