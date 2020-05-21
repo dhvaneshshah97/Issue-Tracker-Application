@@ -105,6 +105,7 @@ export default class IssueList extends React.Component {
         const { location: { pathname, search }, history } = this.props;
         const { id } = issues[index];
         const data = await graphQLFetch(query, { id });
+        alert("Issue Deleted Successfully...!")
         if (data && data.issueDelete) {
             this.setState((prevState) => {
                 const newList = [...prevState.issues];
