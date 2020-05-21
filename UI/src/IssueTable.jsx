@@ -7,6 +7,7 @@ const Issuerow = withRouter(({
     issue,
     location: { search },
     closeIssue,
+    deleteIssue,
     index,
 }) => {
     const selectLocation = { pathname: `/issues/${issue.id}`, search };
@@ -26,6 +27,8 @@ const Issuerow = withRouter(({
                 <NavLink to={selectLocation}>Select</NavLink>
                 {' | '}
                 <button type="button" onClick={() => { closeIssue(index); }}>Close</button>
+                {' | '}
+                <button type="button" onClick={() => { deleteIssue(index); }}>Delete</button>
             </td>
         </tr>
     );
@@ -33,14 +36,14 @@ const Issuerow = withRouter(({
 
 
 
-export default function IssueTable({ issues, closeIssue }) {
+export default function IssueTable({ issues, closeIssue, deleteIssue }) {
 
     // const sampleIssue1 = Object.assign({},sampleIssue);
     // setTimeout(()=>{this.createIssue(sampleIssue1)},2500);
 
 
 
-    const issueRows = issues.map((issue, index) => <Issuerow key={issue.id} issue={issue} closeIssue={closeIssue} index={index} />);
+    const issueRows = issues.map((issue, index) => <Issuerow key={issue.id} issue={issue} closeIssue={closeIssue} index={index} deleteIssue={deleteIssue} />);
     return (
         <table className="bordered-table">
             <thead>
