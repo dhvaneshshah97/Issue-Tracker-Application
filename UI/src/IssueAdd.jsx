@@ -19,7 +19,7 @@ export default class IssueAdd extends React.Component {
             owner: form.owner.value,
             title: form.title.value,
             status: form.status.value,
-            completionDate: "4-3-2019",
+            completionDate:  new Date(new Date().getTime() + 1000*60*60*24*10),
 
         }
         const { createIssue } = this.props;

@@ -7,7 +7,6 @@ import graphQLFetch from './graphQLFetch.js'
 import { Route } from 'react-router-dom';
 import IssueDetail from './IssueDetail.jsx';
 
-
 export default class IssueList extends React.Component {
     constructor() {
         super();

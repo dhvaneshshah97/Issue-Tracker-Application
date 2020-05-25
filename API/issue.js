@@ -1,11 +1,14 @@
 const { UserInputError } = require('apollo-server-express');
 const { getDb, getNextSequence } = require('./db');
 
+
 async function get(_, { id }) {
     const db = getDb();
     const issue = await db.collection('issues').findOne({ id });
     return issue;
 }
+
+
 
 async function list(_, { status, effortMin, effortMax }) {
     const db = getDb();
@@ -72,10 +75,10 @@ async function remove(_, { id }) {
 }
 
 
-module.exports = { 
-    list, 
-    add, 
-    get, 
-    update, 
-    delete: remove, 
+module.exports = {
+    list,
+    add,
+    get,
+    update,
+    delete: remove,
 };

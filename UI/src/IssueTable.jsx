@@ -16,9 +16,9 @@ const Issuerow = withRouter(({
             <td>{issue.id}</td>
             <td>{issue.status}</td>
             <td>{issue.owner}</td>
-            <td>{issue.created}</td>
+            <td>{issue.created.toDateString()}</td>
             <td>{issue.effort}</td>
-            <td>{issue.completionDate}</td>
+            <td>{issue.completionDate? issue.completionDate.toDateString(): ' '}</td>
             <td>{issue.title}</td>
             {/* <td><Link to={ `/edit/${issue.id}` }>Edit</Link></td> */}
             <td>

@@ -64,7 +64,7 @@ export default class IssueEdit extends React.Component {
         const data = await graphQLFetch(query, { id });
         if (data) {
             const { issue } = data;
-            issue.completionDate = issue.completionDate ? issue.completionDate : '';
+            issue.completionDate = issue.completionDate ? issue.completionDate.toDateString() : '';
             // issue.effort = issue.effort != null ? issue.effort.toString() : '';
             issue.owner = issue.owner != null ? issue.owner : '';
             issue.description = issue.description != null ? issue.description : '';
@@ -92,7 +92,7 @@ export default class IssueEdit extends React.Component {
                     <tbody>
                         <tr>
                             <td>Created:</td>
-                            <td>{created}</td>
+                            <td>{created.toDateString()}</td>
                         </tr>
                         <tr>
                             <td>Status:</td>

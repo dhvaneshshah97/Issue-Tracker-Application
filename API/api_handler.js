@@ -3,6 +3,7 @@ const about = require('./about');
 const issue = require('./issue');
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
+const GraphQLDate = require('./graphql_date');
 
 const resolvers = {
     Query: {
@@ -16,6 +17,7 @@ const resolvers = {
         issueUpdate: issue.update,
         issueDelete: issue.delete,
     },
+    GraphQLDate
 
 };
 

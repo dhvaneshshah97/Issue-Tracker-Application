@@ -1,3 +1,5 @@
+scalar GraphQLDate
+
 "Toned down Issue, used as inputs, without server generated values."
 input IssueInputs{
   title : String!
@@ -5,7 +7,7 @@ input IssueInputs{
   status : StatusType = New
   owner : String
   effort : Int 
-  completionDate : String
+  completionDate : GraphQLDate
   description: String
 }
 
@@ -16,7 +18,7 @@ input IssueUpdateInputs {
   status: StatusType
   owner: String
   effort: Int
-  completionDate: String  
+  completionDate: GraphQLDate  
   description: String
 }
 
@@ -26,9 +28,9 @@ type Issue {
   title: String!
   status: StatusType!
   owner: String
-  created: String!
+  created: GraphQLDate!
   effort: Int
-  completionDate: String
+  completionDate: GraphQLDate
   description: String
   
 }
