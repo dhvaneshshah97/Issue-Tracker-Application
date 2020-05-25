@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom'
+import { Button } from 'react-bootstrap';
 
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -95,9 +96,9 @@ class IssueFilter extends React.Component {
                     onChange={this.onChangeEffortMax}
                 />
                 {'  '}
-                <button type="button" onClick={this.applyFilter}>Apply</button>
+                <Button type="button" bsStyle="primary" onClick={this.applyFilter}>Apply</Button>
                 {' '}
-                <button type="button" onClick={this.showOriginalFilter} disabled={!changed}>Reset</button>
+                <Button type="button" onClick={this.showOriginalFilter} disabled={!changed}>Reset</Button>
             </div>
         );
     };
