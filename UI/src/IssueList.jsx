@@ -6,6 +6,7 @@ import IssueAdd from './IssueAdd.jsx';
 import graphQLFetch from './graphQLFetch.js'
 import { Route } from 'react-router-dom';
 import IssueDetail from './IssueDetail.jsx';
+import { Label } from 'react-bootstrap';
 
 export default class IssueList extends React.Component {
     constructor() {
@@ -123,8 +124,8 @@ export default class IssueList extends React.Component {
         const { issues } = this.state;
         const { match } = this.props
         return (
-            <div>
-                <h1>Issue Tracker</h1>
+            <React.Fragment>
+                <h1><Label>Issue Tracker Application</Label></h1>
                 <IssueFilter />
                 <hr />
                 <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
@@ -132,7 +133,7 @@ export default class IssueList extends React.Component {
                 <IssueAdd createIssue={this.createIssue} />
                 <hr />
                 <Route path={`${match.path}/:id`} component={IssueDetail} />
-            </div>
+            </React.Fragment>
         );
 
     }
