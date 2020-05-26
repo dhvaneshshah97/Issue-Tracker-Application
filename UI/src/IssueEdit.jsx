@@ -88,7 +88,7 @@ export default class IssueEdit extends React.Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <h3>{`Editing issue: ${id}`}</h3>
-                <table>
+                < table className="bordered-table">
                     <tbody>
                         <tr>
                             <td>Created:</td>

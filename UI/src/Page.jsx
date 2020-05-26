@@ -9,7 +9,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 function NavBar() {
     return (
-        <Navbar fixedTop>
+        <Navbar dark fixedTop>
             <Navbar.Header>
                 <Navbar.Brand>Issue Tracker Application</Navbar.Brand>
             </Navbar.Header>

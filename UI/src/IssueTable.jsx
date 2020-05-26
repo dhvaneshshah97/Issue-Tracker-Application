@@ -1,9 +1,9 @@
 /* eslint linebreak-style: ["error", "windows"] */
 import React from 'react';
 import { Link, withRouter, NavLink } from 'react-router-dom';
-import { Button, Glyphicon, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button, Glyphicon, Tooltip, OverlayTrigger, Table } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
-// function Issuerow({ issue }) {
 const Issuerow = withRouter(({
     issue,
     location: { search },
@@ -12,38 +12,56 @@ const Issuerow = withRouter(({
     index,
 }) => {
     const selectLocation = { pathname: `/issues/${issue.id}`, search };
+    const editTooltip = (
+        <Tooltip id="edit-tooltip" placement="top">Edit Issue</Tooltip>
+    );
     const closeTooltip = (
         <Tooltip id="close-tooltip" placement="top">Close Issue</Tooltip>
     );
     const deleteTooltip = (
         <Tooltip id="delete-tooltip" placement="top">Delete Issue</Tooltip>
     );
+    function onClose(e) {
+        e.preventDefault();
+        closeIssue(index);
+    }
+    function onDelete(e) {
+        e.preventDefault();
+        deleteIssue(index);
+    }
+    const tableRow = (<tr>
+        <td>{issue.id}</td>
+        <td>{issue.status}</td>
+        <td>{issue.owner}</td>
+        <td>{issue.created.toDateString()}</td>
+        <td>{issue.effort}</td>
+        <td>{issue.completionDate ? issue.completionDate.toDateString() : ' '}</td>
+        <td>{issue.title}</td>
+        <td>
+            <LinkContainer to={`/edit/${issue.id}`}>
+                <OverlayTrigger delayShow={300} overlay={editTooltip}>
+                    <Button bsSize="xsmall">
+                        <Glyphicon glyph="edit" />
+                    </Button>
+                </OverlayTrigger>
+            </LinkContainer>
+            {' | '}
+            <OverlayTrigger delayShow={300} overlay={closeTooltip}>
+                <Button bsSize="xsmall" type="button" onClick={onClose}><Glyphicon glyph="remove" /></Button>
+            </OverlayTrigger>
+            {'  '}
+            <OverlayTrigger delayShow={300} overlay={deleteTooltip}>
+                <Button bsSize="xsmall" type="button" onClick={() => {onDelete}}><Glyphicon glyph="trash" /></Button>
+            </OverlayTrigger>
+
+        </td>
+    </tr>)
     return (
-        <tr>
-            <td>{issue.id}</td>
-            <td>{issue.status}</td>
-            <td>{issue.owner}</td>
-            <td>{issue.created.toDateString()}</td>
-            <td>{issue.effort}</td>
-            <td>{issue.completionDate? issue.completionDate.toDateString(): ' '}</td>
-            <td>{issue.title}</td>
-            {/* <td><Link to={ `/edit/${issue.id}` }>Edit</Link></td> */}
-            <td>
-                <Link to={`/edit/${issue.id}`}>Edit</Link>
-                {' | '}
-                <NavLink to={selectLocation}>Select</NavLink>
-                {' | '}
-                <OverlayTrigger delayShow={300} overlay={closeTooltip}>
-                    <Button bsSize="xsmall" type="button" onClick={() => { closeIssue(index); }}><Glyphicon glyph="remove" /></Button>
-                </OverlayTrigger>
-                {'  '}
-                <OverlayTrigger delayShow={300} overlay={deleteTooltip}>
-                    <Button bsSize="xsmall" type="button" onClick={() => { deleteIssue(index); }}><Glyphicon glyph="trash" /></Button>
-                </OverlayTrigger>
-                
-            </td>
-        </tr>
-    );
+        <LinkContainer to={selectLocation}>
+            {tableRow}
+        </LinkContainer>
+    )
+
 });
 
 
@@ -57,7 +75,7 @@ export default function IssueTable({ issues, closeIssue, deleteIssue }) {
 
     const issueRows = issues.map((issue, index) => <Issuerow key={issue.id} issue={issue} closeIssue={closeIssue} index={index} deleteIssue={deleteIssue} />);
     return (
-        <table className="bordered-table">
+        <Table bordered condensed hover responsive>
             <thead>
                 <tr>
                     <th>Id</th>
@@ -73,6 +91,6 @@ export default function IssueTable({ issues, closeIssue, deleteIssue }) {
             <tbody>
                 {issueRows}
             </tbody>
-        </table>
+        </Table>
     );
 }
