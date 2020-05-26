@@ -6,6 +6,7 @@ import IssueAdd from './IssueAdd.jsx';
 import graphQLFetch from './graphQLFetch.js'
 import { Route } from 'react-router-dom';
 import IssueDetail from './IssueDetail.jsx';
+import { Panel, Glyphicon } from 'react-bootstrap';
 
 export default class IssueList extends React.Component {
     constructor() {
@@ -122,9 +123,17 @@ export default class IssueList extends React.Component {
     render() {
         const { issues } = this.state;
         const { match } = this.props
+        const hasFilter = this.props.location.search !== '';
         return (
             <React.Fragment>
-                <IssueFilter />
+                <Panel defaultExpanded={hasFilter}>
+                    <Panel.Heading>
+                        <Panel.Title toggle><Glyphicon glyph="filter" /> Issues Filtered By:</Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Body collapsible>
+                        <IssueFilter />
+                    </Panel.Body>
+                </Panel>
                 <hr />
                 <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
                 <hr />
