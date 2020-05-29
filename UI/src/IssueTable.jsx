@@ -51,7 +51,7 @@ const Issuerow = withRouter(({
             </OverlayTrigger>
             {'  '}
             <OverlayTrigger delayShow={300} overlay={deleteTooltip}>
-                <Button bsSize="xsmall" type="button" onClick={() => {onDelete}}><Glyphicon glyph="trash" /></Button>
+                <Button bsSize="xsmall" type="button" onClick={onDelete}><Glyphicon glyph="trash" /></Button>
             </OverlayTrigger>
 
         </td>
