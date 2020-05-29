@@ -1,6 +1,7 @@
 /* eslint linebreak-style: ["error", "windows"] */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Form, FormControl, FormGroup, ControlLabel, Button, } from 'react-bootstrap';
 
 export default class IssueAdd extends React.Component {
     constructor() {
@@ -19,7 +20,7 @@ export default class IssueAdd extends React.Component {
             owner: form.owner.value,
             title: form.title.value,
             status: form.status.value,
-            completionDate:  new Date(new Date().getTime() + 1000*60*60*24*10),
+            completionDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10),
 
         }
         const { createIssue } = this.props;
@@ -32,17 +33,32 @@ export default class IssueAdd extends React.Component {
     render() {
         // console.log("hello");
         return (
-            <form name="issueAdd" onSubmit={this.handleSubmit}>
-                <input type="text" name="owner" placeholder="Owner" /><br/>
-                <input type="text" name="title" placeholder="Title" /><br/>
-                <input type="text" name="status" placeholder="Status" /><br/>
-                <button type="submit">Add</button>
-            </form>
+            <Form inline name="issueAdd" onSubmit={this.handleSubmit}>
+                <FormGroup>
+                    <ControlLabel>Owner:</ControlLabel>
+                    {' '}
+                    <FormControl type="text" name="owner" />
+                </FormGroup>
+                {' '}
+                <FormGroup>
+                    <ControlLabel>Title:</ControlLabel>
+                    {' '}
+                    <FormControl type="text" name="title" />
+                </FormGroup>
+                {' '}
+                <FormGroup>
+                    <ControlLabel>Status:</ControlLabel>
+                    {' '}
+                    <FormControl type="text" name="status" />
+                </FormGroup>
+                {' '}
+                <Button bsStyle="primary" type="submit">Add</Button>
+            </Form>
 
         )
     }
 }
 
 IssueAdd.propTypes = {
-    createIssue : PropTypes.func.isRequired,
+    createIssue: PropTypes.func.isRequired,
 }

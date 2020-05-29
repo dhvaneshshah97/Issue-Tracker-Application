@@ -41,6 +41,7 @@ function NavBar() {
 function Footer() {
     return(
         <small>
+            <hr />
             <p className="text-center">
                 Full source code availabel at this 
                 {' '}
