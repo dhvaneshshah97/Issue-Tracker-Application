@@ -4,14 +4,22 @@ import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Col, Panel, Form, FormGroup, FormControl, ControlLabel, ButtonToolbar, Button, Table } from 'react-bootstrap';
+import Toast from './Toast.jsx';
+
 export default class IssueEdit extends React.Component {
     constructor() {
         super();
         this.state = {
             issue: {},
+            toastVisible: false,
+            toastMessage: ' ',
+            toastType: 'success',
         };
         this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.showSuccess = this.showSuccess.bind(this);
+        this.showError = this.showError.bind(this);
+        this.dismissToast = this.dismissToast.bind(this);
     }
     componentDidMount() {
         this.loadData();
@@ -50,7 +58,7 @@ export default class IssueEdit extends React.Component {
         const data = await graphQLFetch(query, { changes, id });
         if (data) {
             this.setState({ issue: data.issueUpdate });
-            alert('Issue Updated Successfully...!'); // eslint-disable-line no-alert
+            this.showSuccess('Issue Updated Successfully...!'); // eslint-disable-line no-alert
         }
     }
     async loadData() {
@@ -73,7 +81,21 @@ export default class IssueEdit extends React.Component {
             this.setState({ issue: {} });
         }
     }
+    showSuccess(message) {
+        this.setState({
+            toastVisible: true, toastMessage: message, toastType: 'success',
+        });
+    }
+    showError(message) {
+        this.setState({
+            toastVisible: true, toastMessage: message, toastType: 'danger',
+        });
+    }
+    dismissToast() {
+        this.setState({ toastVisible: false });
+    }
     render() {
+        const { toastVisible, toastMessage, toastType } = this.state;
         const { issue: { id } } = this.state;
         const { match: { params: { id: propsId } } } = this.props;
         if (id == null) {
@@ -158,6 +180,7 @@ export default class IssueEdit extends React.Component {
                     {' | '}
                     <Link to={`/edit/${id + 1}`}>Next</Link>
                 </Panel.Footer>
+                <Toast showing={toastVisible} onDismiss={this.dismissToast} bsStyle={toastType}> {toastMessage} </Toast>
             </Panel>
         );
     }

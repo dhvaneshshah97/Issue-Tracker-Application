@@ -7,14 +7,23 @@ import graphQLFetch from './graphQLFetch.js'
 import { Route } from 'react-router-dom';
 import IssueDetail from './IssueDetail.jsx';
 import { Panel, Glyphicon } from 'react-bootstrap';
+import Toast from './Toast.jsx';
 
 export default class IssueList extends React.Component {
     constructor() {
         super();
-        this.state = { issues: [] };
+        this.state = {
+            issues: [],
+            toastVisible: false,
+            toastMessage: ' ',
+            toastType: 'info',
+        };
         this.createIssue = this.createIssue.bind(this);
         this.closeIssue = this.closeIssue.bind(this);
         this.deleteIssue = this.deleteIssue.bind(this);
+        this.showSuccess = this.showSuccess.bind(this);
+        this.showError = this.showError.bind(this);
+        this.dismissToast = this.dismissToast.bind(this);
     }
     componentDidMount() {
         this.loadData();
@@ -105,7 +114,7 @@ export default class IssueList extends React.Component {
         const { location: { pathname, search }, history } = this.props;
         const { id } = issues[index];
         const data = await graphQLFetch(query, { id });
-        alert("Issue Deleted Successfully...!")
+        this.showSuccess("Issue Deleted Successfully...!")
         if (data && data.issueDelete) {
             this.setState((prevState) => {
                 const newList = [...prevState.issues];
@@ -119,11 +128,24 @@ export default class IssueList extends React.Component {
             this.loadData();
         }
     }
-
+    showSuccess(message) {
+        this.setState({
+            toastVisible: true, toastMessage: message, toastType: 'success',
+        });
+    }
+    showError(message) {
+        this.setState({
+            toastVisible: true, toastMessage: message, toastType: 'danger',
+        });
+    }
+    dismissToast() {
+        this.setState({ toastVisible: false });
+    }
     render() {
         const { issues } = this.state;
         const { match } = this.props
         const hasFilter = this.props.location.search !== '';
+        const { toastVisible, toastType, toastMessage } = this.state;
         return (
             <React.Fragment>
                 <Panel defaultExpanded={hasFilter}>
@@ -138,6 +160,7 @@ export default class IssueList extends React.Component {
                 <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
                 <IssueAdd createIssue={this.createIssue} />
                 <Route path={`${match.path}/:id`} component={IssueDetail} />
+                <Toast showing={toastVisible} onDismiss={this.dismissToast} bsStyle={toastType}>{toastMessage}</Toast>
             </React.Fragment>
         );
 
