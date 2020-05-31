@@ -2,7 +2,7 @@
 import React from 'react';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
-import IssueAdd from './IssueAdd.jsx';
+// import IssueAdd from './IssueAdd.jsx';
 import graphQLFetch from './graphQLFetch.js'
 import { Route } from 'react-router-dom';
 import IssueDetail from './IssueDetail.jsx';
@@ -18,7 +18,7 @@ export default class IssueList extends React.Component {
             toastMessage: ' ',
             toastType: 'info',
         };
-        this.createIssue = this.createIssue.bind(this);
+        // this.createIssue = this.createIssue.bind(this);
         this.closeIssue = this.closeIssue.bind(this);
         this.deleteIssue = this.deleteIssue.bind(this);
         this.showSuccess = this.showSuccess.bind(this);
@@ -70,23 +70,23 @@ export default class IssueList extends React.Component {
         }
 
     }
-    async createIssue(issue) {
-        // issue.id = this.state.issues.length + 1;
-        // issue.created = new Date();
-        // const newIssueList = this.state.issues.slice();
-        // newIssueList.push(issue);
-        // this.setState({ issues: newIssueList });
-        const query = `mutation issueAdd($issue: IssueInputs!){
-            issueAdd(issue:$issue) {
-                id 
-                }
-                }`;
-        const data = await graphQLFetch(query, { issue });
-        if (data) {
-            this.loadData();
-        }
+    // async createIssue(issue) {
+    //     // issue.id = this.state.issues.length + 1;
+    //     // issue.created = new Date();
+    //     // const newIssueList = this.state.issues.slice();
+    //     // newIssueList.push(issue);
+    //     // this.setState({ issues: newIssueList });
+    //     const query = `mutation issueAdd($issue: IssueInputs!){
+    //         issueAdd(issue:$issue) {
+    //             id 
+    //             }
+    //             }`;
+    //     const data = await graphQLFetch(query, { issue });
+    //     if (data) {
+    //         this.loadData();
+    //     }
 
-    }
+    // }
     async closeIssue(index) {
         const query = `mutation issueClose($id: Int!) {
         issueUpdate(id: $id, changes: { status: Closed }) {
@@ -158,7 +158,7 @@ export default class IssueList extends React.Component {
                 </Panel>
                 <hr />
                 <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
-                <IssueAdd createIssue={this.createIssue} />
+                {/* <IssueAdd createIssue={this.createIssue} /> */}
                 <Route path={`${match.path}/:id`} component={IssueDetail} />
                 <Toast showing={toastVisible} onDismiss={this.dismissToast} bsStyle={toastType}>{toastMessage}</Toast>
             </React.Fragment>
