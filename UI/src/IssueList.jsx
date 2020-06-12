@@ -30,11 +30,12 @@ export default class IssueList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.location.search.prevSearch !== this.props.location.search) {
+        const { location: { search: prevSearch } } = prevProps;
+        const { location: { search } } = this.props;
+        if (prevSearch !== search) {
             this.loadData();
         }
     }
-
     async loadData() {
         // const { location: { search } } = this.props;
         const params = new URLSearchParams(this.props.location.search);
