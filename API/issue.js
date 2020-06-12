@@ -44,11 +44,12 @@ async function counts(_, { status, effortMin, effortMax }) {
     ]).toArray();
     const stats = {};
     results.forEach((result) => {
-        // eslint-disable-next-line no-underscore-dangle
+        // eslint-disable-next-line no-underscore-dangle    
         const { owner, status: statusKey } = result._id;
         if (!stats[owner]) stats[owner] = { owner };
         stats[owner][statusKey] = result.count;
     });
+    // Object.values return the array of values of object's properties.
     return Object.values(stats);
 }
 
