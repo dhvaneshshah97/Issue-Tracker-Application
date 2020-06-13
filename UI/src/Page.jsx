@@ -10,7 +10,7 @@ import IssueAddNavItem from './IssueAddNavItem.jsx';
 
 function NavBar() {
     return (
-        <Navbar dark fixedTop>
+        <Navbar fixedTop>
             <Navbar.Header>
                 <Navbar.Brand>Issue Tracker Application</Navbar.Brand>
             </Navbar.Header>

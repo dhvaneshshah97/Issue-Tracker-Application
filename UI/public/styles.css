@@ -1,0 +1,33 @@
+table.table-hover tr {
+    cursor: pointer;
+}
+
+body {
+    padding-top: 70px;
+}
+
+.panel-title a {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* .navbar-default {
+    background-color: #0099cc;
+}
+
+.navbar-default .navbar-brand {
+    color: whitesmoke;
+}
+.navbar-default .navbar-brand:hover {
+    color: lawngreen;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color:whitesmoke;
+    
+}
+.navbar-default .navbar-nav>li>a:hover {
+    color:lawngreen;
+    
+} */

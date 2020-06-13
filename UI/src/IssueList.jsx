@@ -154,7 +154,7 @@ export default class IssueList extends React.Component {
                         <Panel.Title toggle><Glyphicon glyph="filter" /> Issues Filtered By:</Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>
-                        <IssueFilter />
+                        <IssueFilter urlBase="/issues" />
                     </Panel.Body>
                 </Panel>
                 <hr />
