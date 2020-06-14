@@ -57,8 +57,8 @@ type Query {
   issueList(
     status:StatusType
     effortMin: Int
-    effortMax: Int  
-): [Issue!]!
+    effortMax: Int
+    page: Int = 1  ): IssueListWithPages
   issue(id: Int!): Issue!
   issueCounts(
   status: StatusType
@@ -74,5 +74,9 @@ type Mutation {
   issueDelete(id: Int!): Boolean!
 }
 
+type IssueListWithPages {
+  issues: [Issue!]!
+  pages: Int
+}
 
   

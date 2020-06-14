@@ -55,7 +55,7 @@ class IssueReport extends Component {
     render() {
         const { stats } = this.state;
         console.log(stats);
-        const statuses = ['New', 'Assigned', 'Fixed', 'Closed','Total'];
+        const statuses = ['New', 'Assigned', 'Fixed', 'Closed'];
         const headerColumns = (
             statuses.map(status => (
                 <th key={status}>{status}</th>

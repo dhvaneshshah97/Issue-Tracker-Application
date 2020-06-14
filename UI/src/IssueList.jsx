@@ -6,14 +6,31 @@ import IssueTable from './IssueTable.jsx';
 import graphQLFetch from './graphQLFetch.js'
 import { Route } from 'react-router-dom';
 import IssueDetail from './IssueDetail.jsx';
-import { Panel, Glyphicon } from 'react-bootstrap';
+import { Panel, Glyphicon, Pagination } from 'react-bootstrap';
 import Toast from './Toast.jsx';
+import { LinkContainer } from 'react-router-bootstrap';
+const SECTION_SIZE = 5;
 
+function PageLink({
+    params, page, activePage, children,
+}) {
+    params.set('page', page);
+    if (page === 0) return React.cloneElement(children, { disabled: true });
+    return (
+        <LinkContainer
+            isActive={() => page === activePage}
+            to={{ search: `?${params.toString()}` }}
+        >
+            {children}
+        </LinkContainer>
+    );
+}
 export default class IssueList extends React.Component {
     constructor() {
         super();
         this.state = {
             issues: [],
+            pages: 0,
             toastVisible: false,
             toastMessage: ' ',
             toastType: 'info',
@@ -40,8 +57,10 @@ export default class IssueList extends React.Component {
         // const { location: { search } } = this.props;
         const params = new URLSearchParams(this.props.location.search);
         const vars = {};
+        let page = parseInt(params.get('page'), 10);
         if (params.get('status')) vars.status = params.get('status');
-
+        if (Number.isNaN(page)) page = 1;
+        vars.page = page;
         const effortMin = parseInt(params.get('effortMin'), 10);
         if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
         const effortMax = parseInt(params.get('effortMax'), 10);
@@ -51,14 +70,20 @@ export default class IssueList extends React.Component {
             $status: StatusType
             $effortMin: Int
             $effortMax: Int
+            $page: Int
             ){
             issueList(
                 status: $status
                 effortMin: $effortMin
-                effortMax: $effortMax 
+                effortMax: $effortMax
+                page: $page 
                 ){
-                id title status owner
-                created effort completionDate 
+                    issues{
+                        id title status owner
+                        created effort completionDate
+                    }
+                    pages
+                 
             }
         }`;
 
@@ -67,7 +92,10 @@ export default class IssueList extends React.Component {
         // console.log(data.issueList);
         // console.log("Program halted above");
         if (data) {
-            this.setState({ issues: data.issueList });
+            this.setState({
+                issues: data.issueList.issues,
+                pages: data.issueList.pages,
+            });
         }
 
     }
@@ -143,6 +171,24 @@ export default class IssueList extends React.Component {
         this.setState({ toastVisible: false });
     }
     render() {
+        const { selectedIssue, pages } = this.state;
+        const { location: { search } } = this.props;
+        const params = new URLSearchParams(search);
+        let page = parseInt(params.get('page'), 10);
+        if (Number.isNaN(page)) page = 1;
+        const startPage = Math.floor((page - 1) / SECTION_SIZE) * SECTION_SIZE + 1;
+        const endPage = startPage + SECTION_SIZE - 1;
+        const prevSection = startPage === 1 ? 0 : startPage - SECTION_SIZE;
+        const nextSection = endPage >= pages ? 0 : startPage + SECTION_SIZE;
+        const items = [];
+        for (let i = startPage; i <= Math.min(endPage, pages); i += 1) {
+            params.set('page', i);
+            items.push((
+                <PageLink key={i} params={params} activePage={page} page={i}>
+                    <Pagination.Item>{i}</Pagination.Item>
+                </PageLink>
+            ));
+        }
         const { issues } = this.state;
         const { match } = this.props
         const hasFilter = this.props.location.search !== '';
@@ -161,6 +207,17 @@ export default class IssueList extends React.Component {
                 <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
                 {/* <IssueAdd createIssue={this.createIssue} /> */}
                 <Route path={`${match.path}/:id`} component={IssueDetail} />
+                <div className="text-center">
+                    <Pagination>
+                        <PageLink params={params} page={prevSection}>
+                            <Pagination.Item>{'<'}</Pagination.Item>
+                        </PageLink>
+                        {items}
+                        <PageLink params={params} page={nextSection}>
+                            <Pagination.Item>{'>'}</Pagination.Item>
+                        </PageLink>
+                    </Pagination>
+                </div>
                 <Toast showing={toastVisible} onDismiss={this.dismissToast} bsStyle={toastType}>{toastMessage}</Toast>
             </React.Fragment>
         );
