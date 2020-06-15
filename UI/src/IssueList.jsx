@@ -6,7 +6,7 @@ import IssueTable from './IssueTable.jsx';
 import graphQLFetch from './graphQLFetch.js'
 import { Route } from 'react-router-dom';
 import IssueDetail from './IssueDetail.jsx';
-import { Panel, Glyphicon, Pagination } from 'react-bootstrap';
+import { Panel, Glyphicon, Pagination, Button } from 'react-bootstrap';
 import Toast from './Toast.jsx';
 import { LinkContainer } from 'react-router-bootstrap';
 const SECTION_SIZE = 5;
@@ -143,7 +143,16 @@ export default class IssueList extends React.Component {
         const { location: { pathname, search }, history } = this.props;
         const { id } = issues[index];
         const data = await graphQLFetch(query, { id });
-        this.showSuccess("Issue Deleted Successfully...!")
+        // this.showSuccess("Issue Deleted Successfully...!")
+        const undoMessage = (
+            <span>
+                {`Deleted issue ${id} successfully.`}
+                <Button bsStyle="link" onClick={() => this.restoreIssue(id)}>
+                    UNDO
+            </Button>
+            </span>
+        );
+        this.showSuccess(undoMessage);
         if (data && data.issueDelete) {
             this.setState((prevState) => {
                 const newList = [...prevState.issues];
@@ -154,6 +163,17 @@ export default class IssueList extends React.Component {
                 return { issues: newList };
             });
         } else {
+            this.loadData();
+        }
+    }
+    async restoreIssue(id) {
+        const query = `mutation issueRestore($id: Int!) {
+        issueRestore(id: $id)
+        }`;
+        const { showSuccess, showError } = this.props;
+        const data = await graphQLFetch(query, { id }, showError);
+        if (data) {
+            this.showSuccess(`Issue ${id} restored successfully.`);
             this.loadData();
         }
     }
