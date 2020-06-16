@@ -3,10 +3,11 @@ import Contents from './Contents.jsx';
 // import { NavLink, Link } from 'react-router-dom';
 import {
     Navbar, Nav, NavItem, NavDropdown,
-    MenuItem, Glyphicon, Tooltip, OverlayTrigger, Grid
+    MenuItem, Glyphicon, Tooltip, OverlayTrigger, Grid, Col,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
+import Search from './Search.jsx';
 
 function NavBar() {
     return (
@@ -25,13 +26,18 @@ function NavBar() {
                     <NavItem>Report</NavItem>
                 </LinkContainer>
             </Nav>
+            <Col sm={5}>
+                <Navbar.Form>
+                    <Search />
+                </Navbar.Form>
+            </Col>
             <Nav pullRight>
                 <IssueAddNavItem />
                 <NavDropdown id="user-dropdown" title={<Glyphicon glyph="option-vertical" />} noCaret >
                     <LinkContainer to="/about">
                         <MenuItem>About</MenuItem>
                     </LinkContainer>
-                    
+
                 </NavDropdown>
             </Nav>
         </Navbar>
@@ -39,11 +45,11 @@ function NavBar() {
 };
 
 function Footer() {
-    return(
+    return (
         <small>
             <hr />
             <p className="text-center">
-                Full source code availabel at this 
+                Full source code availabel at this
                 {' '}
                 <a href="https://github.com/dhvaneshshah97/Issue_Tracker_Application_MERN_Stack_GraphQL" target="_blank">
                     GitHub Respository
