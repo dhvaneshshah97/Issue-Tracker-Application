@@ -43,7 +43,7 @@ class IssueReport extends Component {
         effortMin: $effortMin
         effortMax: $effortMax
         ) {
-        owner New Assigned Fixed Closed
+        owner New Assigned Fixed Closed 
         }
         }`;
         const data = await graphQLFetch(query, vars);
