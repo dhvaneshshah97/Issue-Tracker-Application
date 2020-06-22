@@ -8,6 +8,7 @@ import {
 import { LinkContainer } from 'react-router-bootstrap';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Search from './Search.jsx';
+import SignInNavItem from './SignInNavItem.jsx';
 
 function NavBar() {
     return (
@@ -33,6 +34,7 @@ function NavBar() {
             </Col>
             <Nav pullRight>
                 <IssueAddNavItem />
+                <SignInNavItem />
                 <NavDropdown id="user-dropdown" title={<Glyphicon glyph="option-vertical" />} noCaret >
                     <LinkContainer to="/about">
                         <MenuItem>About</MenuItem>
