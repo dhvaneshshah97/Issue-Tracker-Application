@@ -12,7 +12,7 @@ import SignInNavItem from './SignInNavItem.jsx';
 
 function NavBar() {
     return (
-        <Navbar fixedTop>
+        <Navbar fixedTop >
             <Navbar.Header>
                 <Navbar.Brand>Issue Tracker Application</Navbar.Brand>
             </Navbar.Header>
@@ -27,7 +27,7 @@ function NavBar() {
                     <NavItem>Report</NavItem>
                 </LinkContainer>
             </Nav>
-            <Col sm={5}>
+            <Col sm={4} >
                 <Navbar.Form>
                     <Search />
                 </Navbar.Form>
@@ -39,7 +39,6 @@ function NavBar() {
                     <LinkContainer to="/about">
                         <MenuItem>About</MenuItem>
                     </LinkContainer>
-
                 </NavDropdown>
             </Nav>
         </Navbar>

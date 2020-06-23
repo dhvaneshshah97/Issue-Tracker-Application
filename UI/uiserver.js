@@ -11,7 +11,11 @@ const port = process.env.UI_SERVER_PORT || 8000;
 // }
 const UI_API_ENDPOINT = process.env.UI_API_ENDPOINT
     || 'http://localhost:3000/graphql';
-const env = { UI_API_ENDPOINT };
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID; 
+const env = { 
+    UI_API_ENDPOINT,
+    GOOGLE_CLIENT_ID, 
+};
 
 const app = express();
 

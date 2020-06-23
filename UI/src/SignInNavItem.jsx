@@ -7,22 +7,49 @@ export default class SignInNavItem extends React.Component {
         super(props);
         this.state = {
             showing: false,
-            user: { signedIn: false, givenName: '' },
+            disabled: true,
+            user: { signedIn: false, givenName: '', image: 'a' },
         };
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.signOut = this.signOut.bind(this);
         this.signIn = this.signIn.bind(this);
     }
+
+    componentDidMount() {
+        const clientId = window.ENV.GOOGLE_CLIENT_ID;
+        if (!clientId) return;
+        window.gapi.load('auth2', () => {
+            if (!window.gapi.auth2.getAuthInstance()) {
+                window.gapi.auth2.init({ client_id: clientId }).then(() => {
+                    this.setState({ disabled: false });
+                });
+            }
+        });
+    }
+
     showModal() {
+        const clientId = window.ENV.GOOGLE_CLIENT_ID;
+        if (!clientId) {
+            alert('Missing environment variable GOOGLE_CLIENT_ID');
+            return;
+        }
         this.setState({ showing: true });
     }
     hideModal() {
         this.setState({ showing: false });
     }
-    signIn() {
+    async signIn() {
         this.hideModal();
-        this.setState({ user: { signedIn: true, givenName: 'Dhvanesh' } });
+        try {
+            const auth2 = window.gapi.auth2.getAuthInstance();
+            const googleUser = await auth2.signIn();
+            const givenName = googleUser.getBasicProfile().getGivenName();
+            const image = googleUser.getBasicProfile().getImageUrl();
+            this.setState({ user: { signedIn: true, givenName, image } });
+        } catch (error) {
+            showError(`Error authenticating with Google: ${error.error}`);
+        }
     }
     signOut() {
         this.setState({ user: { signedIn: false, givenName: '' } });
@@ -30,15 +57,24 @@ export default class SignInNavItem extends React.Component {
 
     render() {
         const { user } = this.state;
+        console.log(user.image);
         if (user.signedIn) {
             return (
-                <NavDropdown title={user.givenName} id="user">
+                <NavDropdown title={
+                // <div className="pull-left">
+                //     <img className="thumbnail-image" style={{width:'25px', height:'25px', borderRadius:'50px'}}
+                //         src={user.image}
+                //         alt="user pic"
+                //     />{' '}
+                    user.givenName}
+                // </div>} 
+                id="user">
                     <MenuItem onClick={this.signOut}>Sign out</MenuItem>
                 </NavDropdown>
             );
         }
 
-        const { showing } = this.state;
+        const { showing, disabled } = this.state;
         return (
             <React.Fragment>
                 <NavItem onClick={this.showModal}>
@@ -49,9 +85,9 @@ export default class SignInNavItem extends React.Component {
                         <Modal.Title>Sign in</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Button block bsStyle="primary" onClick={this.signIn}>
-                            Sign In
-                    </Button>
+                        <Button block bsStyle="primary" onClick={this.signIn} disabled={disabled}>
+                            <img src="https://goo.gl/4yjp6B" alt="Sign In" />
+                        </Button>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle="link" onClick={this.hideModal}>Cancel</Button>
