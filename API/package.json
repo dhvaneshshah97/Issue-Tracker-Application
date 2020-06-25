@@ -6,15 +6,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon -e js,graphql -w . -w .env server.js",
-    "lint" : "eslint ."
+    "lint": "eslint ."
   },
   "author": "Dhvanesh Shah",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.11.0",
+    "body-parser": "^1.19.0",
     "chokidar": "^3.3.1",
+    "cors": "^2.8.5",
     "curl": "^0.1.4",
     "dotenv": "^8.2.0",
+    "google-auth-library": "^6.0.2",
     "graphql": "^15.0.0",
     "mongodb": "^3.5.6"
   },

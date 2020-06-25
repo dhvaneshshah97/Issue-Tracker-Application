@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavItem, Button, Modal, NavDropdown, MenuItem } from 'react-bootstrap';
 import { render } from 'react-dom';
+// import SingleValue from 'react-select/src/components/SingleValue';
 
 export default class SignInNavItem extends React.Component {
     constructor(props) {
@@ -41,14 +42,25 @@ export default class SignInNavItem extends React.Component {
     }
     async signIn() {
         this.hideModal();
+        let googleToken;
         try {
             const auth2 = window.gapi.auth2.getAuthInstance();
             const googleUser = await auth2.signIn();
-            const givenName = googleUser.getBasicProfile().getGivenName();
-            const image = googleUser.getBasicProfile().getImageUrl();
-            this.setState({ user: { signedIn: true, givenName, image } });
+            googleToken = googleUser.getAuthResponse().id_token;
+            const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+            const rawResponse = await fetch(`${apiEndpoint}/signin`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ google_token: googleToken }),
+            });
+            const response = await rawResponse.json();
+            const { signedIn, givenName } = response;
+
+            // const givenName = googleUser.getBasicProfile().getGivenName();
+            // const image = googleUser.getBasicProfile().getImageUrl();
+            this.setState({ user: { signedIn: signedIn, givenName: givenName } });
         } catch (error) {
-            showError(`Error authenticating with Google: ${error.error}`);
+            alert(`Error signing into the app: ${error.error}`);
         }
     }
     signOut() {
@@ -61,14 +73,14 @@ export default class SignInNavItem extends React.Component {
         if (user.signedIn) {
             return (
                 <NavDropdown title={
-                // <div className="pull-left">
-                //     <img className="thumbnail-image" style={{width:'25px', height:'25px', borderRadius:'50px'}}
-                //         src={user.image}
-                //         alt="user pic"
-                //     />{' '}
+                    // <div className="pull-left">
+                    //     <img className="thumbnail-image" style={{width:'25px', height:'25px', borderRadius:'50px'}}
+                    //         src={user.image}
+                    //         alt="user pic"
+                    //     />{' '}
                     user.givenName}
-                // </div>} 
-                id="user">
+                    // </div>} 
+                    id="user">
                     <MenuItem onClick={this.signOut}>Sign out</MenuItem>
                 </NavDropdown>
             );
