@@ -17,7 +17,7 @@ export default class SignInNavItem extends React.Component {
         this.signIn = this.signIn.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const clientId = window.ENV.GOOGLE_CLIENT_ID;
         if (!clientId) return;
         window.gapi.load('auth2', () => {
@@ -27,7 +27,21 @@ export default class SignInNavItem extends React.Component {
                 });
             }
         });
+        await this.loadData();
     }
+
+    async loadData() {
+        const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+        const response = await fetch(`${apiEndpoint}/user`, {
+            method: 'POST',
+        });
+        const body = await response.text();
+        const result = JSON.parse(body);
+        const { signedIn, givenName } = result;
+        console.log('result' + result)
+        this.setState({ user: { signedIn, givenName } });
+    }
+
 
     showModal() {
         const clientId = window.ENV.GOOGLE_CLIENT_ID;
@@ -47,29 +61,34 @@ export default class SignInNavItem extends React.Component {
             const auth2 = window.gapi.auth2.getAuthInstance();
             const googleUser = await auth2.signIn();
             googleToken = googleUser.getAuthResponse().id_token;
+        } catch (error) {
+            alert(`Error authenticating with Google: ${error.error}`);
+        }
+
+        try {
             const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
-            const rawResponse = await fetch(`${apiEndpoint}/signin`, {
+            const response = await fetch(`${apiEndpoint}/signin`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
                 body: JSON.stringify({ google_token: googleToken }),
-            });
-            const response = await rawResponse.json();
-            const { signedIn, givenName } = response;
 
-            // const givenName = googleUser.getBasicProfile().getGivenName();
-            // const image = googleUser.getBasicProfile().getImageUrl();
-            this.setState({ user: { signedIn: signedIn, givenName: givenName } });
+            });
+            const body = await response.text();
+            const result = JSON.parse(body);
+            const { signedIn, givenName } = result;
+            this.setState({ user: { signedIn, givenName } });
         } catch (error) {
-            alert(`Error signing into the app: ${error.error}`);
+            alert(`Error signing into the app: ${error}`);
         }
     }
     signOut() {
+
         this.setState({ user: { signedIn: false, givenName: '' } });
     }
 
     render() {
         const { user } = this.state;
-        console.log(user.image);
         if (user.signedIn) {
             return (
                 <NavDropdown title={

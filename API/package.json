@@ -14,11 +14,13 @@
     "apollo-server-express": "^2.11.0",
     "body-parser": "^1.19.0",
     "chokidar": "^3.3.1",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "curl": "^0.1.4",
     "dotenv": "^8.2.0",
     "google-auth-library": "^6.0.2",
     "graphql": "^15.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.6"
   },
   "devDependencies": {
