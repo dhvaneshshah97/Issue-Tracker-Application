@@ -11,6 +11,7 @@ export default async function graphQLFetch(query, variables = {}) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query, variables }),
+            credentials: 'include',
         });
         const body = await response.text();
         const result = JSON.parse(body, jsonDateReviver);

@@ -2,6 +2,7 @@
 
 const Router = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
@@ -17,6 +18,8 @@ if (!JWT_SECRET) {
 
 const routes = new Router();
 routes.use(bodyParser.json());
+const origin = process.env.UI_SERVER_ORIGIN;
+routes.use(cors({ origin, credentials: true }));
 
 
 function getUser(req) {
@@ -59,12 +62,10 @@ routes.post('/signin', async (req, res) => {
         email: email,
     }
     const token = jwt.sign(credentials, JWT_SECRET);
-    res.cookie('jwt', token, { httpOnly: true });
+    res.cookie('jwt', token, { httpOnly: true, expires: new Date(Date.now()+ 900*1000) }); // set cookie for 900 sec(15 min)
     res.json(credentials);
 });
 routes.post('/user', (req, res) => {
-    res.header("Access-Control-Allow-Credentials","true");
-    res.header("Access-Control-Allow-Origin","http://localhost:8000")
     res.send(getUser(req));
 });
 module.exports = { routes };
