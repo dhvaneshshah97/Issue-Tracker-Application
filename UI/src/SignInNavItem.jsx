@@ -46,7 +46,11 @@ export default class SignInNavItem extends React.Component {
         try {
             const auth2 = window.gapi.auth2.getAuthInstance();
             const googleUser = await auth2.signIn();
-            googleToken = googleUser.getAuthResponse().id_token;
+            googleToken = googleUser.getAuthResponse().id_token; 
+        } catch(error){
+            alert(`Error authenticating with google: ${error.error}`);
+        }
+        try{
             const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
             const rawResponse = await fetch(`${apiEndpoint}/signin`, {
                 method: 'POST',
@@ -54,22 +58,21 @@ export default class SignInNavItem extends React.Component {
                 body: JSON.stringify({ google_token: googleToken }),
             });
             const response = await rawResponse.json();
+            console.log(response);
             const { signedIn, givenName } = response;
-
-            // const givenName = googleUser.getBasicProfile().getGivenName();
-            // const image = googleUser.getBasicProfile().getImageUrl();
             this.setState({ user: { signedIn: signedIn, givenName: givenName } });
         } catch (error) {
             alert(`Error signing into the app: ${error.error}`);
         }
+        
     }
+
     signOut() {
         this.setState({ user: { signedIn: false, givenName: '' } });
     }
 
     render() {
         const { user } = this.state;
-        console.log(user.image);
         if (user.signedIn) {
             return (
                 <NavDropdown title={

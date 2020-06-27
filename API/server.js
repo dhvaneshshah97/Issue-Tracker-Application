@@ -2,9 +2,9 @@ require('dotenv').config();
 const express = require("express");
 const cors = require('cors');
 const port = process.env.API_SERVER_PORT || 3000;
-const { connectToDb } = require('./db');
-const { installHandler } = require('./api_handler')
-const auth = require('./auth');
+const { connectToDb } = require('./db.js');
+const { installHandler } = require('./api_handler.js')
+const auth = require('./auth.js');
 const app = express();
 app.use(cors());
 app.use('/auth', auth.routes);
