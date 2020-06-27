@@ -17,7 +17,7 @@ export default class SignInNavItem extends React.Component {
         this.signIn = this.signIn.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const clientId = window.ENV.GOOGLE_CLIENT_ID;
         if (!clientId) return;
         window.gapi.load('auth2', () => {
@@ -27,6 +27,19 @@ export default class SignInNavItem extends React.Component {
                 });
             }
         });
+        await this.loadData();
+    }
+
+    async loadData() {
+        const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+        const response = await fetch(`${apiEndpoint}/user`, {
+            method: 'POST',
+            credentials: "include",
+        });
+        const body = await response.text();
+        const result = JSON.parse(body);
+        const { signedIn, givenName } = result;
+        this.setState({ user: { signedIn, givenName } });
     }
 
     showModal() {
@@ -46,11 +59,11 @@ export default class SignInNavItem extends React.Component {
         try {
             const auth2 = window.gapi.auth2.getAuthInstance();
             const googleUser = await auth2.signIn();
-            googleToken = googleUser.getAuthResponse().id_token; 
-        } catch(error){
+            googleToken = googleUser.getAuthResponse().id_token;
+        } catch (error) {
             alert(`Error authenticating with google: ${error.error}`);
         }
-        try{
+        try {
             const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
             const rawResponse = await fetch(`${apiEndpoint}/signin`, {
                 method: 'POST',
@@ -64,7 +77,7 @@ export default class SignInNavItem extends React.Component {
         } catch (error) {
             alert(`Error signing into the app: ${error.error}`);
         }
-        
+
     }
 
     signOut() {
