@@ -72,7 +72,6 @@ export default class SignInNavItem extends React.Component {
                 body: JSON.stringify({ google_token: googleToken }),
             });
             const response = await rawResponse.json();
-            console.log(response);
             const { signedIn, givenName } = response;
             this.setState({ user: { signedIn: signedIn, givenName: givenName } });
         } catch (error) {
@@ -81,8 +80,19 @@ export default class SignInNavItem extends React.Component {
 
     }
 
-    signOut() {
-        this.setState({ user: { signedIn: false, givenName: '' } });
+    async signOut() {
+        const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+        try {
+            await fetch(`${apiEndpoint}/signout`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+            const auth2 = window.gapi.auth2.getAuthInstance();
+            await auth2.signOut();
+            this.setState({ user: { signedIn: false, givenName: '' } });
+        } catch (error) {
+            alert(`Error signing out: ${error}`);
+        }
     }
 
     render() {
