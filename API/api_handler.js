@@ -1,6 +1,7 @@
 const fs = require('fs');
 const about = require('./about');
 const issue = require('./issue');
+const auth = require('./auth.js');
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
 const GraphQLDate = require('./graphql_date');
@@ -26,12 +27,18 @@ const resolvers = {
 const server = new ApolloServer({
     typeDefs: fs.readFileSync('schema.graphql', 'utf-8'),
     resolvers,
+    context: getContext,
     formatError: (error) => {
         console.log(error);
         return error;
     }
 
 });
+
+function getContext({ req }) {
+    const user = auth.getUser(req);
+    return { user };
+}
 
 function installHandler(app) {
     const enableCors = (process.env.ENABLE_CORS || 'true') == 'true';

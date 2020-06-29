@@ -59,9 +59,10 @@ class IssueAddNavItem extends React.Component {
     render() {
         const { showing } = this.state;
         const { toastVisible, toastMessage, toastType } = this.state;
+        const { user: { signedIn } } = this.props;
         return (
             <React.Fragment>
-                <NavItem onClick={this.showModal}>
+                <NavItem disabled={!signedIn} onClick={this.showModal}>
                     <OverlayTrigger
                         placement="right"
                         delayShow={300}
