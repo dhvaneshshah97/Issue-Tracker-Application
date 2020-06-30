@@ -1,2 +1,6 @@
 node_modules
 package-lock.json
+UI/.env
+API/.env
+UI/public/*.js
+UI/public/*.js.map
