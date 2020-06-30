@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Col, Panel, Form, FormGroup, FormControl, ControlLabel, ButtonToolbar, Button, Table } from 'react-bootstrap';
+import { Col, Panel, Form, FormGroup, FormControl, ControlLabel, ButtonToolbar, Button, Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Toast from './Toast.jsx';
+import UserContext from './UserContext.js';
 
 export default class IssueEdit extends React.Component {
     constructor() {
@@ -107,6 +108,8 @@ export default class IssueEdit extends React.Component {
         const { issue: { title, status } } = this.state;
         const { issue: { owner, effort, description } } = this.state;
         const { issue: { created, completionDate } } = this.state;
+        const user = this.context;
+
         return (
             <Panel>
                 <Panel.Heading>
@@ -166,7 +169,7 @@ export default class IssueEdit extends React.Component {
                         <FormGroup>
                             <Col smOffset={3} sm={6}>
                                 <ButtonToolbar>
-                                    <Button bsStyle="primary" type="submit">Submit</Button>
+                                    <Button disabled={!user.signedIn} bsStyle="primary" type="submit">Submit</Button>
                                     <LinkContainer to="/issues">
                                         <Button bsStyle="link">Back</Button>
                                     </LinkContainer>
@@ -185,3 +188,5 @@ export default class IssueEdit extends React.Component {
         );
     }
 }
+
+IssueEdit.contextType = UserContext;
