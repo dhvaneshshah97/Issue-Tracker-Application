@@ -75,7 +75,7 @@ routes.post('/signin', async (req, res) => {
         email: email,
     }
     const token = jwt.sign(credentials, JWT_SECRET);
-    res.cookie('jwt', token, { httpOnly: true, expires: new Date(Date.now() + 900 * 1000) }); // set cookie for 900 sec(15 min)
+    res.cookie('jwt', token, { httpOnly: true, expires: new Date(Date.now() + 900 * 1000), domain: process.env.COOKIE_DOMAIN }); // set cookie for 900 sec(15 min)
     res.json(credentials);
 });
 
