@@ -62,15 +62,21 @@ class IssueAddNavItem extends React.Component {
         const { user: { signedIn } } = this.props;
         return (
             <React.Fragment>
-                <NavItem disabled={!signedIn} onClick={this.showModal}>
+                {signedIn ? <NavItem onClick={this.showModal}>
                     <OverlayTrigger
                         placement="right"
-                        delayShow={300}
                         overlay={<Tooltip id="create-issue">Create Issue</Tooltip>}
                     >
                         <Glyphicon glyph="plus" />
                     </OverlayTrigger>
-                </NavItem>
+                </NavItem> : <NavItem>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id="msg-tooltip">Signin required!</Tooltip>}>
+                            <div style={{ display: 'inline-block', cursor: 'not-allowed' }}>
+                                <Glyphicon glyph="plus" />
+                            </div>
+                        </OverlayTrigger>
+                    </NavItem>}
+
                 <Modal keyboard show={showing} onHide={this.hideModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Create Issue</Modal.Title>

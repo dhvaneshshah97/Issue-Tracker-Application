@@ -13,7 +13,7 @@ import UserContext from './UserContext.js';
 
 function NavBar({ user, onUserChange }) {
     return (
-        <Navbar fixedTop >
+        <Navbar >
             <Navbar.Header>
                 <Navbar.Brand>Issue Tracker Application</Navbar.Brand>
             </Navbar.Header>

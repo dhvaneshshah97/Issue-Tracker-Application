@@ -14,10 +14,10 @@ class IssueRowPlain extends React.Component {
         const disabled = !user.signedIn;
         const selectLocation = { pathname: `/issues/${issue.id}`, search };
         const editTooltip = (
-            <Tooltip id="edit-tooltip" placement="top">Edit Issue</Tooltip>
+            <Tooltip id="edit-tooltip" >Edit Issue</Tooltip>
         );
         const closeTooltip = (
-            <Tooltip id="close-tooltip" placement="top">Close Issue</Tooltip>
+            <Tooltip id="close-tooltip" >Close Issue</Tooltip>
         );
         const deleteTooltip = (
             <Tooltip id="delete-tooltip" placement="top">Delete Issue</Tooltip>
@@ -40,20 +40,37 @@ class IssueRowPlain extends React.Component {
             <td>{issue.title}</td>
             <td>
                 <LinkContainer to={`/edit/${issue.id}`}>
-                    <OverlayTrigger delayShow={300} overlay={editTooltip}>
+                    <OverlayTrigger delayShow={300} overlay={editTooltip} key="left" placement="left">
                         <Button bsSize="xsmall">
                             <Glyphicon glyph="edit" />
                         </Button>
                     </OverlayTrigger>
                 </LinkContainer>
                 {' | '}
-                <OverlayTrigger delayShow={300} overlay={closeTooltip}>
+                {user.signedIn ? (<OverlayTrigger delayShow={300} overlay={closeTooltip} key="top" placement="top">
                     <Button bsSize="xsmall" type="button" onClick={onClose} disabled={disabled}><Glyphicon glyph="remove" /></Button>
-                </OverlayTrigger>
+                </OverlayTrigger>) : (
+                        <OverlayTrigger overlay={<Tooltip id="msg-tooltip" >Signin required!</Tooltip>} key="top" placement="top">
+                            <div style={{ display: 'inline-block', cursor: 'not-allowed' }}>
+                                <Button bsSize="xsmall" disabled={true} type="button" style={{ pointerEvents: 'none' }}><Glyphicon glyph="remove" /></Button>
+                            </div>
+                        </OverlayTrigger>
+                    )}
+
                 {'  '}
-                <OverlayTrigger delayShow={300} overlay={deleteTooltip}>
+                {user.signedIn ? (<OverlayTrigger delayShow={300} overlay={deleteTooltip}>
                     <Button bsSize="xsmall" type="button" onClick={onDelete} disabled={disabled}><Glyphicon glyph="trash" /></Button>
-                </OverlayTrigger>
+                </OverlayTrigger>) : (
+                        <OverlayTrigger overlay={<Tooltip id="msg-tooltip" >Signin required!</Tooltip>} key="right" placement="right">
+                            <div style={{ display: 'inline-block', cursor: 'not-allowed' }}>
+                                <Button bsSize="xsmall" disabled={true} type="button" style={{ pointerEvents: 'none' }}><Glyphicon glyph="trash" /></Button>
+                            </div>
+                        </OverlayTrigger>
+                    )}
+
+                {/* <OverlayTrigger delayShow={300} overlay={deleteTooltip}>
+                    <Button bsSize="xsmall" type="button" onClick={onDelete} disabled={disabled}><Glyphicon glyph="trash" /></Button>
+                </OverlayTrigger> */}
 
             </td>
         </tr>)
