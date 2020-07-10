@@ -19,7 +19,7 @@
 - Pivot table to show number of different type of issues assigned to Users
 
 
-## To run App on your machine ->
+## To run App on your machine 
 1.  Clone the entire repo
 
 2. Open the repo folder in any code editor of your choice. (my preference is Visual Studio Code)
@@ -33,7 +33,7 @@
 `npm start`
 
 5. Open another terminal and Go to API folder   
- -> type the following series of commands:   
+-> type the following series of commands:   
 `cd API`    
 `npm install`   
 `npm start`
